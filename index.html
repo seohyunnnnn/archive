@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A사 AX Native Academy 아카이브</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* VOICE: 고객사에 보여주는 결과물 쇼룸. 짧은 문장, 숫자, 바로 열리는 결과물.
+   IDEA: 대상별로 나뉜 전시 갤러리. 탭 하나에 플레이북과 결과물이 모두 있다.
+   PICTURE: 플레이북 표지 카드와 결과물 카드 그리드가 화면을 채운다.
+   COLOUR and TYPE: 흰 바탕, 먹색, 짙은 초록 하나. Noto Sans KR 하나로 굵기만 바꾼다.
+   LAYOUT: 1200px, 상단 요약 다음 대상 탭, 탭 안에 요약 띠, 플레이북, 필터 갤러리. */
+:root{color-scheme:light;--bg:#F6F7F6;--card:#FFFFFF;--ink:#14171A;--ink2:#4B5159;--ink3:#8B9199;--line:#E2E5E4;--acc:#0E5C4A;--acc2:#E3EEEA;--dark:#111416}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 'Noto Sans KR',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1,h2,h3,h4,p{margin:0}
+.w{max-width:1200px;margin:0 auto;padding:0 max(20px,3vw)}
+
+/* header */
+.top{background:var(--card);border-bottom:1px solid var(--line)}
+.top .w{padding-top:36px;padding-bottom:32px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 40px;align-items:end}
+.brand{grid-column:1/-1;display:flex;justify-content:space-between;font-size:13px;color:var(--ink3)}
+.brand b{color:var(--ink);font-weight:700}
+h1{font-size:clamp(30px,4vw,44px);font-weight:900;letter-spacing:-.03em;line-height:1.15}
+.sub{font-size:16px;color:var(--ink2);margin-top:10px}
+.kpi{display:flex;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kpi div{padding:12px 20px;border-left:1px solid var(--line);text-align:left}
+.kpi div:first-child{border-left:none}
+.kpi b{display:block;font-size:26px;font-weight:900;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12.5px;color:var(--ink3);white-space:nowrap}
+
+/* audience tabs */
+.aud{position:sticky;top:0;z-index:20;background:rgba(246,247,246,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.aud .w{display:flex;gap:8px;padding-top:12px;padding-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.aud button{flex:none;display:flex;align-items:center;gap:10px;min-height:48px;padding:8px 18px 8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:15px;font-weight:700}
+.aud button span{font-size:12.5px;font-weight:500;color:var(--ink3)}
+.aud button[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.aud button[aria-selected=true] span{color:#B8C0C6}
+
+/* panel */
+.panel{padding:32px 0 80px}
+.panel[hidden]{display:none}
+.strip{background:var(--dark);color:#fff;border-radius:14px;padding:26px 28px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 40px;align-items:center}
+.strip .who{font-size:13px;color:#9FB8AF;font-weight:500}
+.strip h2{font-size:clamp(21px,2.4vw,27px);font-weight:900;letter-spacing:-.02em;line-height:1.4;margin-top:6px}
+.strip h2 em{font-style:normal;color:#7FD3B5}
+.strip p{font-size:14px;color:#B8C0C6;margin-top:8px}
+.sfig{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.sfig div{background:rgba(255,255,255,.06);border-radius:10px;padding:12px 14px}
+.sfig b{display:block;font-size:26px;font-weight:900;line-height:1.15;letter-spacing:-.02em}
+.sfig span{font-size:12px;color:#B8C0C6}
+
+.blk{margin-top:44px}
+.bh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.bh h3{font-size:19px;font-weight:900;letter-spacing:-.02em}
+.bh h3 small{font-size:14px;font-weight:500;color:var(--ink3);margin-left:6px}
+.bh p{font-size:13px;color:var(--ink3)}
+
+/* playbook covers */
+.pbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.pb{display:flex;flex-direction:column;border-radius:12px;overflow:hidden;background:var(--card);border:1px solid var(--line);transition:transform .18s,box-shadow .18s}
+.pb:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(20,23,26,.12)}
+.cv{aspect-ratio:4/3;background:var(--dark);color:#fff;padding:16px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.cv::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.cv .t{display:flex;justify-content:space-between;font-size:12px;color:#9FB8AF;font-weight:500;position:relative}
+.cv h4{margin-top:auto;font-size:25px;font-weight:900;line-height:1.1;letter-spacing:-.02em;position:relative}
+.cv h4 small{display:block;font-size:13px;font-weight:500;color:#B8C0C6;margin-top:6px;letter-spacing:0}
+.pbs.one{grid-template-columns:1fr}.pbs.one .pb{flex-direction:row}.pbs.one .cv{aspect-ratio:auto;width:min(380px,42%);min-height:210px}.pbs.one .bd{padding:22px 26px;justify-content:center}.pbs.one .bd p{font-size:15px}.pbs.one .nums{margin-top:6px;font-size:14px}
+@media(max-width:600px){.pbs.one .pb{flex-direction:column}.pbs.one .cv{width:auto}}
+.pb.lead .cv{background:linear-gradient(150deg,#167058,#0E5C4A 50%,#083E30)}
+.pb .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pb .bd p{font-size:13px;color:var(--ink2)}
+.pb .nums{display:flex;gap:14px;font-size:12.5px;color:var(--ink3);margin-top:auto}
+.pb .nums b{color:var(--ink);font-weight:700}
+.pb .go{font-size:13px;font-weight:700;color:var(--acc)}
+
+/* gallery */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chips button{min-height:36px;padding:4px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13.5px;font-weight:500}
+.chips button b{font-weight:500;color:var(--ink3);margin-left:4px}
+.chips button[aria-pressed=true]{border-color:var(--acc);background:var(--acc2);color:var(--acc);font-weight:700}
+.gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.it{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;min-height:150px;transition:transform .15s,box-shadow .15s,border-color .15s}
+a.it:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(20,23,26,.09);border-color:#C9D0CD}
+.it .k{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.it .k span{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--c,var(--acc2));color:var(--f,var(--acc))}
+.it .k i{font-style:normal;font-size:11.5px;color:var(--ink3)}
+.it h4{font-size:15.5px;font-weight:700;line-height:1.4;letter-spacing:-.01em;margin-top:4px}
+.it p{font-size:13px;color:var(--ink2);line-height:1.55}
+.it .o{margin-top:auto;padding-top:8px;font-size:12.5px;font-weight:700;color:var(--acc)}
+.it .o.pbk{color:var(--ink2)}
+.it .o.off{color:var(--ink3);font-weight:500}
+.more{margin-top:14px;text-align:center}
+.more button{min-height:44px;padding:8px 22px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:14px}
+
+.sh{font-size:15.5px;font-weight:700}.sh small{font-size:13px;font-weight:500;color:var(--ink3);margin-left:6px}
+.brf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.bf{background:var(--dark);color:#fff;border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.bf .k{display:flex;justify-content:space-between;font-size:12px;color:#9FB8AF}
+.bf h4{font-size:19px;font-weight:900;line-height:1.4;letter-spacing:-.02em}
+.bf .q{font-size:13.5px;color:#B8C0C6}
+.bf .q b{color:#fff;font-weight:700}
+.bf blockquote{margin:0;padding:12px 14px;border-left:3px solid #7FD3B5;background:rgba(255,255,255,.05);font-size:14px;line-height:1.6;border-radius:0 8px 8px 0}
+.bf .toc{display:flex;flex-wrap:wrap;gap:6px}
+.bf .toc span{font-size:12px;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:#D5DBDF}
+.bf .ft{margin-top:auto;font-size:12.5px;color:#9FB8AF}
+details.it{cursor:pointer}
+details.it summary{list-style:none;display:flex;flex-direction:column;gap:6px}
+details.it summary::-webkit-details-marker{display:none}
+
+details.it dl{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);display:grid;grid-template-columns:72px 1fr;gap:6px 12px;font-size:13px}
+details.it dt{color:var(--ink3)}details.it dd{margin:0;color:var(--ink2)}
+details.it ol{margin:0;padding-left:18px}
+@media(max-width:760px){.brf{grid-template-columns:1fr}}
+/* quotes */
+.qs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.qs figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.qs blockquote{margin:0;font-size:15px;font-weight:500;line-height:1.6}
+.qs figcaption{margin-top:auto;font-size:12.5px;color:var(--ink3)}
+
+/* course cards (ms) */
+.crs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cr{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.cr .tg{font-size:12px;font-weight:700;color:var(--acc)}
+.cr h4{font-size:17px;font-weight:900;line-height:1.4;letter-spacing:-.02em}
+.cr .d{font-size:13px;color:var(--ink3)}
+.cr ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink2);display:flex;flex-direction:column;gap:4px}
+.cr .n{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);font-size:13px;color:var(--ink3)}
+.cr .n b{font-size:20px;font-weight:900;color:var(--ink);margin-right:4px}
+
+.foot{border-top:1px solid var(--line);background:var(--card)}
+.foot .w{padding-top:18px;padding-bottom:28px;font-size:12.5px;color:var(--ink3)}
+
+@media(max-width:1000px){.pbs,.gal{grid-template-columns:repeat(3,minmax(0,1fr))}.strip{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .top .w{grid-template-columns:1fr}.kpi{flex-wrap:wrap}.kpi div{flex:1 1 45%}.kpi div:nth-child(3){border-left:none}.kpi div:nth-child(n+3){border-top:1px solid var(--line)}
+  .pbs,.gal{grid-template-columns:repeat(2,minmax(0,1fr))}.qs,.crs{grid-template-columns:1fr}.sfig b{font-size:22px}
+}
+@media(max-width:460px){.pbs,.gal{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pb,.it{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="w">
+    <div class="brand"><span><b>AX NATIVE ACADEMY</b> 결과물 아카이브</span><span>운영 IGM 세계경영연구원</span></div>
+    <div>
+      <h1>A사 AX Native Academy</h1>
+      <p class="sub">글로벌 전략 컨설팅사 A사의 리더, 컨설턴트, 경영지원 조직이 AI 교육 중에 직접 만든 결과물입니다. 2026년 9월 ~ 12월.</p>
+    </div>
+    <div class="kpi">
+      <div><b>14</b><span>운영 차수</span></div>
+      <div><b>590+</b><span>실습 결과물</span></div>
+      <div><b>5</b><span>발행 플레이북</span></div>
+      <div><b>9.4</b><span>평균 추천 점수</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="aud" aria-label="교육 대상">
+  <div class="w" role="tablist" id="aud">
+    <button role="tab" data-p="leader" aria-selected="true">리더 <span>파트너, 임원</span></button>
+    <button role="tab" data-p="consultant" aria-selected="false">컨설턴트 <span>중급, 심화</span></button>
+    <button role="tab" data-p="ms" aria-selected="false">경영지원 <span>HR, 마케팅, 재무, 세일즈옵</span></button>
+  </div>
+</nav>
+
+<main class="w">
+
+  <section class="panel" id="p-leader" role="tabpanel">
+    <div class="strip">
+      <div>
+        <div class="who">하네스 엔지니어링 실전 워크숍, 파트너와 임원 대상</div>
+        <h2>교육 전 Skill을 만들어 본 리더 <em>0명</em>.<br>닷새 뒤 <em>12명</em>이 자기 업무 Skill을 제출했습니다.</h2>
+        <p>2차수 리더 20명, 2026.10.24 + 10.31 토요일 이틀. 공시 데이터를 직접 연결해 대시보드를 만들고, 여러 에이전트에게 일을 나눠 맡겨 봤습니다.</p>
+      </div>
+      <div class="sfig">
+        <div><b>76</b><span>이틀간 결과물</span></div>
+        <div><b>12</b><span>업무 Skill</span></div>
+        <div><b>9.9</b><span>2일차 추천 점수</span></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>플레이북</h3><p>교육 후 리더에게 발행한 기록</p></div>
+      <div class="pbs one" id="pb-leader"></div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>리더들이 만든 결과물 <small id="n-leader"></small></h3><p>카드를 누르면 플레이북의 해당 장이 열립니다</p></div>
+      <div class="chips" id="c-leader"></div>
+      <div class="gal" id="g-leader"></div>
+      <div class="more" id="m-leader"></div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>리더들이 남긴 말</h3><p>사후설문 자유응답</p></div>
+      <div class="qs">
+        <figure><blockquote>"트렌드보다 실제 실행이 중요하다는 점이 공감되었습니다."</blockquote><figcaption>1일차, 가장 인상 깊었던 순간</figcaption></figure>
+        <figure><blockquote>"백과사전, 스킬, 숏폼까지, 비즈니스든 일상이든 다양하게 활용하겠습니다."</blockquote><figcaption>2일차, 좋았던 점</figcaption></figure>
+        <figure><blockquote>"AI 세상 할 일은 많고, 변화를 준비해야 한다고 생각했습니다."</blockquote><figcaption>1일차 사후설문</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-consultant" role="tabpanel" hidden>
+    <div class="strip">
+      <div>
+        <div class="who">하네스 엔지니어링 실전 워크숍(중급) 5개 차수, AI 에이전트 개발 프로젝트(심화) 2개 차수</div>
+        <h2>이틀 과정 안에서 <em>데이터 연결부터 웹 배포까지</em>.<br>조별 분석 보고서를 모두 링크로 제출했습니다.</h2>
+        <p>서울 열린데이터와 DART 공시를 에이전트에 연결해 출점 전략을 세우고, 결과물은 GitHub Pages로 배포해 공유했습니다.</p>
+      </div>
+      <div class="sfig">
+        <div><b>136</b><span>사전설문 참여, 1~4차수</span></div>
+        <div><b>420+</b><span>실습 결과물</span></div>
+        <div><b>9.1~9.3</b><span>추천 점수</span></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>차수별 플레이북 <small>4권</small></h3><p>모든 차수가 같은 8장 구조</p></div>
+      <div class="pbs" id="pb-consultant"></div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>바로 열리는 결과물 <small id="n-consultant"></small></h3><p>수료생이 웹에 직접 배포한 원본으로 연결됩니다</p></div>
+      <div class="chips" id="c-consultant"></div>
+      <div class="gal" id="g-consultant"></div>
+      <div class="more" id="m-consultant"></div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>심화, AI 에이전트 개발 프로젝트 <small>FDE 실전 과정, 1차수 11.06 + 11.14</small></h3><p>FDE처럼 현업 문제를 직접 쪼개고, 1인 1개 에이전트 PoC로 설계부터 의사결정 브리핑까지</p></div>
+      <div class="brf" id="brf"></div>
+      <div class="bh" style="margin-top:22px"><h4 class="sh">1일차, 내 업무를 쪼개 고른 MVP 설계서 <small>10건 중 8건, 카드를 누르면 설계 내용이 펼쳐집니다</small></h4></div>
+      <div class="gal" id="g-adv"></div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>컨설턴트들이 남긴 말</h3><p>사후설문 자유응답</p></div>
+      <div class="qs">
+        <figure><blockquote>"보고서 작성 시 멀티 페르소나를 통해 작성하고 리뷰하는 루프를 여러번 돌렸는데 너무 효과적이였습니다."</blockquote><figcaption>3차수, 교육 일주일 후</figcaption></figure>
+        <figure><blockquote>"AI를 보통 혼자서만 쓰는데, AI로 협업하는 방법을 배운 것 같습니다."</blockquote><figcaption>1차수</figcaption></figure>
+        <figure><blockquote>"AI가 단순 업무 보조수단이 아니라, AI가 스스로 창작물을 만들게 할 수 있음이 놀라웠습니다."</blockquote><figcaption>4차수</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-ms" role="tabpanel" hidden>
+    <div class="strip">
+      <div>
+        <div class="who">경영지원(MS) 직무별 업무 자동화 과정 3종, 5개 차수</div>
+        <h2>부서가 <em>매일 만지는 파일</em>로 실습했습니다.<br>마스터데이터, 경비 증빙, 견적서까지.</h2>
+        <p>HR과 마케팅, 재무와 세일즈옵으로 반을 나눠 각 부서의 실제 업무 흐름을 그대로 실습 과제로 썼습니다.</p>
+      </div>
+      <div class="sfig">
+        <div><b>3</b><span>직무별 과정</span></div>
+        <div><b>85</b><span>실습 결과물</span></div>
+        <div><b>1일</b><span>차수당 5시간</span></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="bh"><h3>과정별 결과물</h3><p>결과물 수는 실습 보드 게시물 기준</p></div>
+      <div class="crs">
+        <div class="cr"><span class="tg">HR, 마케팅</span><h4>마스터데이터 관리와 반복 업무 자동화</h4><span class="d">1차수 10.23, 2차수 11.13</span><ul><li>엑셀 편집기 화면을 HTML로 직접 제작</li><li>고객 포럼 등록, 체크인 명단 정리 Skill</li><li>월 고정비 대사 Skill</li><li>인사변동과 IT 자산 대조 후 협조 요청 메일</li><li>PPT 생성 Skill</li></ul><div class="n"><b>46</b>건</div></div>
+        <div class="cr"><span class="tg">재무, 세일즈옵</span><h4>엑셀 업무 플로우 자동화와 KPI 대시보드</h4><span class="d">1차수 10.30, 2차수 11.06</span><ul><li>경비 반려 건별 재청구 안내 메일 초안</li><li>견적서 이미지에서 상품 목록을 엑셀로 추출</li><li>승인번호 중복 결제 검출 함수와 Skill</li><li>10월 재무 통합 대시보드</li></ul><div class="n"><b>33</b>건</div></div>
+        <div class="cr"><span class="tg">경영지원 공통</span><h4>나만의 AI 에이전트 만들기</h4><span class="d">11.20</span><ul><li>받은 메일에 답하는 메일 자동화 웹앱</li><li>메일 자동화 Skill</li><li>비용 검증과 승인 앱</li></ul><div class="n"><b>6</b>건</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot"><div class="w">고객사명은 A사로 표기했고 참가자 실명은 표기하지 않았습니다. 결과물 원본 링크는 수료생이 공개 배포한 페이지입니다.</div></footer>
+
+<script>
+{
+  const $=id=>document.getElementById(id);
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const CAT={
+    dash:['DART 대시보드','#E3EEEA','#0E5C4A'],skill:['업무 Skill','#F4EEDD','#7A5A10'],enc:['백과사전','#E7ECF5','#2D4C80'],
+    short:['숏폼 영상','#F5E6EC','#8E2F52'],report:['출점 보고서','#E3EEEA','#0E5C4A'],watch:['바이브 코딩','#ECECEC','#3A3F45'],mvp:['에이전트 MVP','#E7ECF5','#2D4C80']
+  };
+
+  const PB={
+    leader:[['lead','playbook/partner-02.html','LEADER 2차수','Leader AX Note','10.24 + 10.31, 리더 20명','리더가 직접 Skill을 만들고 DART 공시로 대시보드를 만든 이틀의 기록입니다. 사전설문 비교, 1일차와 2일차 결과물 전체, 리더 12명의 업무 Skill, 사후설문을 한 권에 담았습니다.',[['76','결과물'],['12','Skill'],['9.9','추천']]]],
+    consultant:[
+      ['','playbook/core-01.html','중급 1차수','AX Native Playbook','10.16 ~ 10.18, 사전설문 31명','서울 열린데이터 상권분석, 11개 조 전원 보고서 웹 배포.',[['69','작품'],['13','Skill'],['11','조별 보고서']]],
+      ['','playbook/core-02.html','중급 2차수','AX Native Playbook','10.30 + 11.07, 사전설문 35명','30초 쇼츠 도입, PE 케이스 출점 제안서를 HTML과 영상으로.',[['97','작품'],['9','Skill'],['9','조별 제안']]],
+      ['','playbook/core-03.html','중급 3차수','AX Native Playbook','11.08 + 11.15, 사전설문 31명','엑셀 데이터 모션, DART, EDGAR, JPX 공시와 법령 연결.',[['82','작품'],['23','데이터 모션'],['9.3','추천']]],
+      ['','playbook/core-04.html','중급 4차수','AX Native Playbook','11.13 + 11.14, 사전설문 39명','30초 모션 광고와 상권분석 출점 제안 18건을 이틀 연속으로.',[['98','작품'],['18','출점 제안'],['9.1','추천']]]
+    ]
+  };
+  for(const k in PB)$('pb-'+k).innerHTML=PB[k].map(p=>`<a class="pb ${p[0]}" href="${p[1]}"><div class="cv"><div class="t"><span>${p[2]}</span><span>A사</span></div><h4>${p[3]}<small>${p[4]}</small></h4></div><div class="bd"><p>${esc(p[5])}</p><div class="nums">${p[6].map(n=>`<span><b>${n[0]}</b> ${n[1]}</span>`).join('')}</div><span class="go">플레이북 열기 →</span></div></a>`).join('');
+
+  const LP='playbook/partner-02.html';
+  const LEADER=[
+    ...[['삼성전자','공시 실적과 증권사 의견을 한 화면에'],['삼성SDI','공시 API로 실적을 모아 시각화'],['현대차, 모비스, 트랜시스','그룹 3사 실적 추정을 나란히 비교'],['한국타이어앤테크놀로지','공시 API로 실적을 모아 시각화'],['신한지주','공시 API로 실적을 모아 시각화'],['카카오','공시 API로 실적을 모아 시각화'],['에스엠','공시 API로 실적을 모아 시각화'],['세원물산','공시 API로 실적을 모아 시각화']].map(x=>['dash',x[0]+' 대시보드',x[1],LP+'#day2','리더 2차수']),
+    ...[['제안서 리뷰어','RFP 기준으로 제안서를 검토'],['회사 1페이지 분석','기업 정보를 한 장짜리 요약으로'],['나라장터 발주 자동검색','대학 발주 사업 공고를 자동 탐색'],['Daily MI','매일 시장 인텔리전스 정리'],['메모리 반도체 뉴스런','업계 뉴스를 매일 정리'],['AX 리서치 자동화','범위를 정하면 수집부터 정리까지'],['고등교육 시장 AX 동향','대학 시장 AX 뉴스 추적'],['국내 카드사, 간편결제사 뉴스','핀테크 최신 뉴스 추적'],['Case Preview','케이스 자료를 한눈에 훑는 프리뷰'],['강의자료 Refresh','기존 자료를 최신 사례로 갱신'],['PPT, HTML 변환','PowerPoint 자료를 HTML로'],['업무 Skill 모음','개인 Skill 저장소']].map(x=>['skill',x[0],x[1],LP+'#ledger','리더 2차수']),
+    ...[['자동차부품 원가손익 백과사전','부품사 원가와 손익 구조를 한 권으로'],['SEMI 백과사전','반도체 산업 용어와 구조'],['우주산업 백과사전','밸류체인과 주요 플레이어'],['면세점 MD 백과사전','면세 MD 업무 전반'],['강남3구 임장 가이드','부동산 임장 체크리스트'],['1인 컨설팅 백과사전','독립 컨설턴트의 일하는 법'],['AIRLINER 여객기 백과사전','기종별 특징 정리'],['프랑스 와인 백과사전','산지와 품종']].map(x=>['enc',x[0],x[1],LP+'#day2','리더 2차수']),
+    ...[['코스피 시가총액 TOP 10','숫자를 30초 영상으로'],['Tier1 Ranking, 중국의 부상','순위 변화를 모션으로'],['레거시에서 AI 네이티브로','조직 변화 메시지 영상'],['니스코 스틸, 30초 숏폼','기업 소개 숏폼']].map(x=>['short',x[0],x[1],LP+'#day2','리더 2차수'])
+  ];
+
+    const CONS=[
+    ['report','삼청동 한옥 쇼베이킹 플래그십','149개 제과 상권 중 84.8점 1위, 투자 회수 3.3년','https://guilloufre.github.io/seoul-bakery/','2차수'],
+    ['report','북창동 15평 점심 픽업 커피','점심 3시간 매출 58%, 3년 뒤 1등급 상권 예상','https://pxy7499.github.io/BCD-Coffee/','2차수'],
+    ['report','둔촌 아침 식사빵 베이커리','유동인구 +45.5%, 1층 월세 하락, 차수 3위','https://junsuyoung96-lang.github.io/stopwatch/bakery/','1차수'],
+    ['report','을지로3가 낮엔 커피 밤엔 바','커피 매출 48억에서 66억, 분기 폐업률 0%','https://dohyun-kong.github.io/cafe/','2차수'],
+    ['report','삼성 코엑스 MICE 커피 출점','매출 1위 대신 직장인구가 받치는 상권','https://j4ckp4rk.github.io/seoul-coffee-2029/','4차수'],
+    ['report','마들역 베이커리 1호점','1,650개 상권에서 오래 버티는 제과 상권 선별','https://ericeoh1012.github.io/store-analysis/bakery-seoul/','4차수'],
+    ['report','이문 시그니처 라인 베이커리','종합 점수 94점, 서울 2위 입지','https://richardbaek1.github.io/firstanalysis/2030_%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC_%EC%9E%85%EC%A7%80_%EB%B3%B4%EA%B3%A0%EC%84%9C.html','1차수'],
+    ['report','망원 요거트 치즈케이크','주말 2030 여성 방문이 평일의 1.41배','https://skynov99.github.io/bakery/','2차수'],
+    ['report','군자 테이스팅 룸','점포당 월매출 2년 +38.2%','https://oscarkiwankim.github.io/seoul-specialty-coffee/','1차수'],
+    ['report','부암동 숲과 책이 있는 카페','동네 61곳에서 10곳, 다시 1순위로','https://darakroom-kr.github.io/stopwatch/seoul-hotplace.html','1차수'],
+    ['report','문정역 중저가 커피 출점','3년 뒤 성장할 송파 상권','https://taejoon-kim.github.io/cafetarget2/','4차수'],
+    ['report','숭실대입구 오후의 오븐','사람, 돈, 경쟁 세 기준으로 고른 베이커리 카페','https://heey990301.github.io/cafe-site-strategy/','4차수'],
+    ['report','하계동 2029 빵집','아침빵, 디저트 빵집의 월 손익까지 계산','https://bohyoek.github.io/mcps/web/','4차수'],
+    ['report','버티는 생활권 베이커리','22개 분기 데이터로 가중치 검증','https://bravehun89-ctrl.github.io/bakery-site-strategy/','4차수'],
+    ['report','빵이 밥이 되는 동네','신도시 아침 식사빵 상권, 콘셉트, 손익','https://edolol9.github.io/-/','4차수'],
+    ['report','망원역 저녁 베이커리 라운지','카페 집적지로 좁혀 고른 입지','https://anna05077-create.github.io/projectvideo2/','4차수'],
+    ['report','서울 커피, 베이커리 출점 제안','서울 상권 분석과 신규 입지','https://hjsamo87.github.io/trade_area_analysis/','4차수'],
+    ['skill','타겟사 3개월 뉴스 브리프','키워드 하나로 현황, 타임라인, 시사점까지','https://github.com/cosmos1219-eunice/workflow','2차수'],
+    ['skill','PR 작성, 리뷰 스쿼드','관점이 다른 리뷰어 4명이 동시에 검토','https://github.com/SYHER/pr-squad-skills','2차수'],
+    ['skill','비상장주 IPO 데일리 브리핑','전문가 의견과 기사 5선을 아침마다 뉴스레터로','https://github.com/heewooyun/Musinsa/blob/claude/musinsa-trend-analysis-skill-rmt56t/.claude/skills/musinsa-ipo-daily-briefing/SKILL.md','2차수'],
+    ['skill','대시보드 DB 조회','복잡한 스키마 설명 없이 원하는 데이터 컷 조회','https://github.com/Yuni-JiyoonPark/stopwatch/blob/main/quant-dashboard-query-skill/README.md','2차수'],
+    ['skill','주간 신규 등록 현황 메일','CSV에서 금주 대상만 걸러 고객사 메일 초안','https://github.com/sun-woosh/auto-mail-writer','2차수'],
+    ['skill','내 계좌 상황실','보유 종목 손익, 위험, 쏠림을 매일 계산','https://github.com/0hyee/portfolio-dashboard','2차수'],
+    ['skill','주문하신 언어 코스','한마디로 대화문, 발음, 채점까지 갖춘 수업 페이지','https://github.com/guilloufre/language-lesson-builder','2차수'],
+    ['skill','일간 쇼츠 업로더','기획, 제작, 검증 후 성과를 다음 주제에 반영','https://github.com/yuuhaaaaa/daily-shorts','2차수'],
+    ['enc','온톨로지 백과사전','낯선 개념을 여러 에이전트로 한 권에','https://syher.github.io/ontology-encyclopedia/','2차수'],
+    ['enc','서울 아파트 재건축 백과사전','재건축 절차와 사례','https://heewooyun.github.io/seoul-reconstruction-encyclopedia/','2차수'],
+    ['enc','영화 용어사전','시네필을 위한 용어 사전','https://jetty3498.github.io/cinepedia/','2차수'],
+    ['enc','위스키 101','입문자를 위한 위스키 가이드','https://pxy7499.github.io/Whiskey101/','2차수'],
+    ['enc','싱글몰트 위스키 사전','증류소와 풍미','https://skynov99.github.io/whiskyDict/index.html','2차수'],
+    ['enc','레드와인 백과사전','품종과 산지','https://jennyyoungjinchoi.github.io/red-wine-encyclopedia/','2차수'],
+    ['enc','치즈 백과사전','픽셀 아트로 만든 치즈 도감','https://guilloufre.github.io/pixel-cheese/','2차수'],
+    ['enc','마카오와 홍콩 백과사전','여행 정보를 한 권으로','https://sminkim1.github.io/MK/macau-hk-encyclopedia.html','2차수'],
+    ['enc','축구선수 백과사전','선수 프로필 도감','https://hyunjaelee1021-ai.github.io/encyclopedia-soccer/','2차수'],
+    ['enc','Y2K 한국 드라마 사전','2000년대 드라마 아카이브','https://sjin032026-source.github.io/dictionary/','2차수'],
+    ['enc','성경 인물 백과사전','신약 인물 정리','https://0hyee.github.io/nt-bible-encyclopedia/','2차수'],
+    ['enc','진돗개 백과사전','품종 가이드','https://jeongminson0901.github.io/encyclopedia/','2차수'],
+    ['short','일요일 기분','HTML로 장면을 짠 30초 영상','https://sjin032026-source.github.io/shorts/play.html','2차수'],
+    ['short','크리스마스 캐럴','모션 카드 영상','https://sminkim1.github.io/xmas-carol/','2차수'],
+    ['short','Stopwatch Motion','1일차 스탑워치를 모션 영상으로','https://syk1210.github.io/stopwatch/','3차수'],
+    ['watch','Orbit Stopwatch','한 줄 지시로 만든 앱을 웹에 배포','https://inkyunglee.github.io/stopwatch/','2차수'],
+    ['watch','사막 스탑워치','같은 지시, 다른 세계관','https://hyunjaelee1021-ai.github.io/stopwatch/','2차수'],
+    ['watch','테니스 스탑워치','경기 시간 측정용','https://jetty3498.github.io/stopwatch/stopwatch.html','2차수'],
+    ['watch','바다 스탑워치','파도 모션 배경','https://rkddkeka3927-stack.github.io/Stopwatch_AD/','2차수'],
+    ['watch','퇴근 스탑워치','퇴근까지 남은 시간','https://heewooyun.github.io/stopwatch/','2차수'],
+    ['watch','달리기 타임키퍼','랩 기록용 타이머','https://parkyoonsoo.github.io/attest/timekeeper.html','2차수'],
+    ['watch','운동 타이머','세트와 휴식 관리','https://jennyyoungjinchoi.github.io/stopwatch/workout-timer.html','2차수'],
+    ['watch','Catch me if you can','도망가는 버튼 스탑워치','https://guilloufre.github.io/stopwatch/','2차수']
+  ];
+
+  const BRF=[
+    ['디지털, AX 총괄 임원용 브리핑','국내 보험사는 향후 6~12개월 동안 어떤 AX 영역을 우선 도입하고, 어떤 영역은 보류해야 하는가','사람이 최종 결정하는 보조형 AI부터 시작하고, 지급과 인수를 AI가 단독으로 정하는 영역은 보류한다. 설계사 지원을 먼저 시범하고 보험금 심사와 언더라이팅은 보조형으로만.',['결론','영역별 비교표','단계별 로드맵','할 일','틀릴 수 있는 이유','아직 모르는 것','판단표','근거 목록'],'근거마다 번호를 붙이고, 규제 원문을 확인하지 못한 점을 "근거 수준 낮음, 잠정 제안"으로 스스로 표시했습니다.'],
+    ['CMO 경영회의 요약','국내 마케팅 조직은 향후 12개월 어떤 AX 기술과 역량에 우선 투자하고, 무엇을 검증 전까지 보류해야 하는가','되돌리기 쉬운 증분 측정 파일럿을 1순위로 승인하고, 플랫폼 자동화 증액과 에이전트 확대는 파일럿 결과 전까지 보류한다.',['결론','중요한 이유','할 일','틀릴 수 있는 이유','아직 모르는 것','투자 우선순위 판단표','근거 목록'],'플랫폼 보고 수치와 외부 실험 결과가 엇갈리는 지점을 반례와 함께 나란히 놓고 결론을 냈습니다.']
+  ];
+  $('brf').innerHTML=BRF.map(b=>`<article class="bf"><div class="k"><span>2일차 결과물, 의사결정 브리핑 에이전트</span><span>2026.11.14</span></div><h4>${esc(b[0])}</h4><p class="q"><b>결정 질문</b> ${esc(b[1])}</p><blockquote>${esc(b[2])}</blockquote><div class="toc">${b[3].map(t=>`<span>${esc(t)}</span>`).join('')}</div><p class="ft">${esc(b[4])}</p></article>`).join('');
+  const ADV=[
+    ['RFP 문제 문장과 우리 강점 매칭','컨설턴트, 제안 스토리라인','RFP 요구사항 표를 열어 문제 문장을 확인할 때','RFP에서 문제 관련 항목을 추리는 일을 매번 손으로 반복',['RFP 문제 문장과 강점 항목을 하나씩 비교','문제 문장별 매칭 결과를 화면에 기록']],
+    ['리포트에서 전망치 페이지 찾기','전략 컨설팅, 산업 전망 리서치','증권사 애널리스트 리포트를 열었을 때','시장 규모와 성장률 조사 때마다 수치를 찾아 옮기는 반복',['리포트에서 전망치가 적힌 페이지를 찾아 띄우기','전망치를 엑셀에 입력','출처명과 발행 연도를 옆 칸에 기록']],
+    ['Google Ads API 인증, 연결 도우미','개발과 장표를 병행하는 컨설턴트','고객사 광고 데이터를 대시보드에 연결해야 할 때','API 연결 절차를 매번 문서에서 찾아 적용',['공식 문서에서 인증 절차를 찾아 적용','테스트 호출로 연결 성공 확인','필드 목록 문서화']],
+    ['n8n 워크플로우를 에이전트 코드로','AI 에이전트, 챗봇 개발 매니저','전환 대상 워크플로우를 열람할 때','n8n 워크플로우를 에이전트 코드로 새로 옮기는 반복',['노드 목록을 순서대로 표로 정리','노드 간 연결 관계 표 작성','노드마다 앞뒤 노드 기록']],
+    ['지라 티켓 통과, 실패 처리','QA, 결함 검증','결함 수정 검증 요청을 받았을 때','개발계 화면과 기대 결과를 대조하고 티켓을 바꾸는 반복',['개발계 화면과 기대 결과 비교','충족 시 통과, 미충족 시 결함 사유 작성']],
+    ['광고 ID별 중복 행 검수','광고 성과 관리','중복 행 삭제 후 검수할 때','광고 ID 중복 정리와 행 수 확인을 손으로 반복',['COUNTIF로 광고 ID별 개수 확인','정제 전후 예상 행 수와 실제 행 수 출력']],
+    ['인플루언서 썸네일 자동 수집','인플루언서 마케팅, 경쟁사 제품 탐지','포스트 썸네일 URL을 확보했을 때','소셜 채널 썸네일을 하나씩 내려받는 반복',['apify로 포스트 썸네일 내려받기','지정 폴더에 저장 확인']],
+    ['상위 게시물 성과 엑셀 정리','소셜 광고, SEO 전략','게시물 목록을 조회수로 정렬한 뒤','유튜브, 틱톡 게시물 설명을 엑셀로 옮기는 반복',['상위 3개 게시물 설명을 한 행씩 기록','게시물 수와 행 수 대조']]
+  ];
+  $('g-adv').innerHTML=ADV.map(a=>`<details class="it" style="--c:${CAT.mvp[1]};--f:${CAT.mvp[2]}"><summary><div class="k"><span>${CAT.mvp[0]}</span><i>심화 1차수</i></div><h4>${esc(a[0])}</h4><p>${esc(a[1])}</p><span class="o">설계 내용 보기 +</span></summary><dl><dt>사용 시점</dt><dd>${esc(a[2])}</dd><dt>현재 문제</dt><dd>${esc(a[3])}</dd><dt>MVP 범위</dt><dd><ol>${a[4].map(x=>`<li>${esc(x)}</li>`).join('')}</ol></dd></dl></details>`).join('');
+
+  function gallery(key,data,ext){
+    const cats=[...new Set(data.map(d=>d[0]))];let cur='all',open=false;const LIM=12;
+    $('n-'+key).textContent=data.length+'건';
+    const chips=()=>$('c-'+key).innerHTML=`<button aria-pressed="${cur==='all'}" data-c="all">전체<b>${data.length}</b></button>`+cats.map(c=>`<button aria-pressed="${cur===c}" data-c="${c}">${CAT[c][0]}<b>${data.filter(d=>d[0]===c).length}</b></button>`).join('');
+    const draw=()=>{const list=data.filter(d=>cur==='all'||d[0]===cur);const show=open?list:list.slice(0,LIM);
+      $('g-'+key).innerHTML=show.map(d=>{const c=CAT[d[0]];return `<a class="it" href="${esc(d[3])}"${ext?' target="_blank" rel="noopener"':''} style="--c:${c[1]};--f:${c[2]}"><div class="k"><span>${c[0]}</span><i>${esc(d[4]||'2차수')}</i></div><h4>${esc(d[1])}</h4><p>${esc(d[2])}</p><span class="o${ext?'':' pbk'}">${ext?'결과물 열기 ↗':'플레이북에서 보기 →'}</span></a>`}).join('');
+      $('m-'+key).innerHTML=list.length>LIM?`<button>${open?'접기':'더 보기 ('+(list.length-LIM)+'건)'}</button>`:'';};
+    $('c-'+key).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cur=b.dataset.c;open=false;chips();draw();});
+    $('m-'+key).addEventListener('click',e=>{if(e.target.closest('button')){open=!open;draw();}});
+    chips();draw();
+  }
+  gallery('leader',LEADER,false);
+  gallery('consultant',CONS,true);
+
+  const tabs=[...document.querySelectorAll('#aud button')];
+  const show=k=>{if(!['leader','consultant','ms'].includes(k))k='leader';tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.p===k));['leader','consultant','ms'].forEach(p=>$('p-'+p).hidden=p!==k);};
+  tabs.forEach(b=>b.addEventListener('click',()=>{show(b.dataset.p);try{history.replaceState(null,'','#'+b.dataset.p)}catch(e){location.hash=b.dataset.p}scrollTo({top:document.querySelector('.aud').offsetTop,behavior:'smooth'})}));
+  addEventListener('hashchange',()=>show(location.hash.slice(1)));
+  show(location.hash.slice(1));
+}
+</script>
+</body>
+</html>
