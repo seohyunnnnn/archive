@@ -235,7 +235,7 @@ details.it ol{margin:0;padding-left:18px}
       <div class="more" id="m-consultant"></div>
     </div>
 
-    <div class="blk">
+    <div class="blk" id="advanced" style="scroll-margin-top:84px">
       <div class="bh"><h3>심화, AI 에이전트 개발 프로젝트 <small>FDE 실전 과정, 1차수 11.06 + 11.14</small></h3><p>FDE처럼 현업 문제를 직접 쪼개고, 1인 1개 에이전트 PoC로 설계부터 의사결정 브리핑까지</p></div>
       <div class="brf" id="brf"></div>
       <div class="bh" style="margin-top:22px"><h4 class="sh">1일차, 내 업무를 쪼개 고른 MVP 설계서 <small>10건 중 8건, 카드를 누르면 설계 내용이 펼쳐집니다</small></h4></div>
@@ -392,8 +392,9 @@ details.it ol{margin:0;padding-left:18px}
   const tabs=[...document.querySelectorAll('#aud button')];
   const show=k=>{if(!['leader','consultant','ms'].includes(k))k='leader';tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.p===k));['leader','consultant','ms'].forEach(p=>$('p-'+p).hidden=p!==k);};
   tabs.forEach(b=>b.addEventListener('click',()=>{show(b.dataset.p);try{history.replaceState(null,'','#'+b.dataset.p)}catch(e){location.hash=b.dataset.p}scrollTo({top:document.querySelector('.aud').offsetTop,behavior:'smooth'})}));
-  addEventListener('hashchange',()=>show(location.hash.slice(1)));
-  show(location.hash.slice(1));
+  const route=()=>{const h=location.hash.slice(1);if(h==='advanced'){show('consultant');setTimeout(()=>$('advanced').scrollIntoView({behavior:'smooth'}),60);}else show(h);};
+  addEventListener('hashchange',route);
+  route();
 }
 </script>
 </body>
