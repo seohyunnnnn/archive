@@ -298,7 +298,7 @@ details.it ol{margin:0;padding-left:18px}
   };
 
   const PB={
-    leader:[['lead','playbook/partner-02.html','LEADER 2차수','Leader AX Note','10.24 + 10.31, 리더 20명','리더가 직접 Skill을 만들고 DART 공시로 대시보드를 만든 이틀의 기록입니다. 사전설문 비교, 1일차와 2일차 결과물 전체, 리더 12명의 업무 Skill, 사후설문을 한 권에 담았습니다.',[['76','결과물'],['12','Skill'],['9.9','추천']]]],
+    leader:[['lead','playbook/leader-02.html','LEADER 2차수','Leader AX Note','10.24 + 10.31, 리더 20명','리더가 직접 Skill을 만들고 DART 공시로 대시보드를 만든 이틀의 기록입니다. 사전설문 비교, 1일차와 2일차 결과물 전체, 리더 12명의 업무 Skill, 사후설문을 한 권에 담았습니다.',[['76','결과물'],['12','Skill'],['9.9','추천']]]],
     consultant:[
       ['','playbook/core-01.html','중급 1차수','AX Native Playbook','10.16 ~ 10.18, 사전설문 31명','서울 열린데이터 상권분석, 11개 조 전원 보고서 웹 배포.',[['69','작품'],['13','Skill'],['11','조별 보고서']]],
       ['','playbook/core-02.html','중급 2차수','AX Native Playbook','10.30 + 11.07, 사전설문 35명','30초 쇼츠 도입, 브랜드 출점 제안서를 HTML과 영상으로.',[['97','작품'],['9','Skill'],['9','조별 제안']]],
@@ -308,7 +308,7 @@ details.it ol{margin:0;padding-left:18px}
   };
   for(const k in PB)$('pb-'+k).innerHTML=PB[k].map(p=>`<a class="pb ${p[0]}" href="${p[1]}"><div class="cv"><div class="t"><span>${p[2]}</span><span>A사</span></div><h4>${p[3]}<small>${p[4]}</small></h4></div><div class="bd"><p>${esc(p[5])}</p><div class="nums">${p[6].map(n=>`<span><b>${n[0]}</b> ${n[1]}</span>`).join('')}</div><span class="go">플레이북 열기 →</span></div></a>`).join('');
 
-  const LP='playbook/partner-02.html';
+  const LP='playbook/leader-02.html';
   const LEADER=[
     ...[['삼성전자','공시 실적과 증권사 의견을 한 화면에'],['삼성SDI','공시 API로 실적을 모아 시각화'],['현대차, 모비스, 트랜시스','그룹 3사 실적 추정을 나란히 비교'],['한국타이어앤테크놀로지','공시 API로 실적을 모아 시각화'],['신한지주','공시 API로 실적을 모아 시각화'],['카카오','공시 API로 실적을 모아 시각화'],['에스엠','공시 API로 실적을 모아 시각화'],['세원물산','공시 API로 실적을 모아 시각화']].map(x=>['dash',x[0]+' 대시보드',x[1],LP+'#day2','리더 2차수']),
     ...[['제안서 리뷰어','RFP 기준으로 제안서를 검토'],['회사 1페이지 분석','기업 정보를 한 장짜리 요약으로'],['나라장터 발주 자동검색','대학 발주 사업 공고를 자동 탐색'],['Daily MI','매일 시장 인텔리전스 정리'],['메모리 반도체 뉴스런','업계 뉴스를 매일 정리'],['AX 리서치 자동화','범위를 정하면 수집부터 정리까지'],['고등교육 시장 AX 동향','대학 시장 AX 뉴스 추적'],['국내 카드사, 간편결제사 뉴스','핀테크 최신 뉴스 추적'],['자료 프리뷰','긴 자료를 한눈에 훑는 프리뷰'],['강의자료 Refresh','기존 자료를 최신 사례로 갱신'],['PPT, HTML 변환','PowerPoint 자료를 HTML로'],['업무 Skill 모음','개인 Skill 저장소']].map(x=>['skill',x[0],x[1],LP+'#ledger','리더 2차수']),
