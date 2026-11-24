@@ -494,7 +494,7 @@ a[data-locked]:hover{transform:none!important}
 .arc-back:hover{background:#0E5C4A}
 .arc-note{background:#C9951A;color:#121417;font:500 12px 'IBM Plex Sans KR',sans-serif;text-align:center;padding:7px 16px}
 </style></head>
-<body><div class="arc-note">A사 AX Native Academy 레퍼런스 사본입니다. 고객사명과 참가자 실명은 가렸고, 내부 패들렛 원본 링크는 비활성화했습니다.</div>
+<body><div class="arc-note">A사 AX Native Academy 레퍼런스 사본입니다. 회사명과 참가자 실명은 가렸고, 내부 패들렛 원본 링크는 비활성화했습니다.</div>
 
 
 <header class="cover">
@@ -864,7 +864,15 @@ a[data-locked]:hover{transform:none!important}
 <script>
 (function(){
 var NAMES=["Innchul Choi", "Myungsoo", "기유 프레드", "SYHER", "0hyee", "노최유하", "강채영", "강희중", "고동우", "공도현", "권성애", "김기완", "김다현", "김상규", "김소희", "김영민", "김영환", "김정훈", "김지선", "김지은", "김태준", "김현하", "김형종", "김혜승", "김희연", "문상식", "박선우", "박인두", "박종필", "박준철", "박지윤", "백지웅", "봉찬식", "서재환", "손정민", "손준열", "신현재", "안주영", "어현경", "오병길", "우지현", "윤명수", "윤희우", "이서현", "이승원", "이유선", "이유평", "이윤희", "이장희", "이준희", "이현수", "이현제", "인준수", "장문석", "장연우", "전미리", "정경헌", "정민섭", "정재윤", "정지용", "정하영", "조광은", "조서현", "조선근", "조현성", "조형진", "최나윤", "최수연", "최원준", "최인철", "하현종", "한나현"];
-var REP=[[/KEARNEY KOREA|Kearney Korea|커니코리아/g,'A사'],[/KEARNEY/g,'A사'],[/Kearney/g,'A사'],[/kearney/g,'client'],[/커니/g,'A사']];
+var REP=[[/KEARNEY KOREA|Kearney Korea|커니코리아/g,'A사'],[/Kearney 스타일/g,'회사 표준 양식'],[/KEARNEY/g,'A사'],[/Kearney/g,'A사'],[/kearney/g,'client'],[/커니/g,'A사'],
+[/AI로 전환하는 것이 컨설팅의 새로운 역할/g,'AI로 전환하는 것이 우리 일의 새로운 역할'],[/컨설팅의 다음 역할/g,'우리 일의 다음 역할'],[/컨설턴트로서 존속/g,'전문가로서 존속'],
+[/AI 시대 컨설턴트의 역할/g,'AI 시대 전문가의 역할'],[/AI 시대에 컨설턴트가/g,'AI 시대에 전문가가'],[/컨설턴트의 역할/g,'전문가의 역할'],
+[/컨설턴트의 (하루|12월|삶)/g,'직장인의 $1'],[/컨설턴트와 야근/g,'직장인과 야근'],[/컨설턴트 스탑워치/g,'직장인 스탑워치'],[/컨설턴트의 하루가/g,'직장인의 하루가'],
+[/각자의 컨설팅 업무/g,'각자의 업무'],[/1인 컨설팅 백과사전/g,'1인 비즈니스 백과사전'],[/독립 컨설턴트/g,'1인 사업가'],[/반도체, 컨설팅부터/g,'반도체, 비즈니스 전략부터'],[/컨설팅 백과사전/g,'비즈니스 전략 백과사전'],
+[/파트너와 상무/g,'임원'],[/파트너와 임원/g,'임원'],[/파트너, 임원/g,'임원'],[/PARTNER & EXECUTIVE/g,'EXECUTIVE'],[/Partner & Executive/g,'Executive'],[/Partner&Executive/g,'Executive'],
+[/PE가 보유한/g,'투자사가 보유한'],[/PE 케이스/g,'브랜드 출점 케이스'],[/케이스 브리프/g,'과제 브리프'],[/Case Preview/g,'자료 프리뷰'],[/케이스 자료를/g,'긴 자료를'],
+[/담당 고객사 실적/g,'관심 기업 실적'],[/So-what|So what/g,'시사점'],[/빅3 컨설팅펌 AX 전략/g,'AX 전략 리포트'],
+[/전략 컨설팅사|컨설팅펌|컨설팅사/g,'기업'],[/컨설턴트/g,'실무자'],[/컨설팅/g,'실무'],[/Partner/g,'Leader'],[/PARTNER/g,'LEADER']];
 function mask(n){return /^[가-힣]+$/.test(n)?n.charAt(0)+Array(n.length).join('○'):'참가자';}
 function fix(t){if(!t)return t;for(var i=0;i<REP.length;i++)t=t.replace(REP[i][0],REP[i][1]);for(var j=0;j<NAMES.length;j++){if(t.indexOf(NAMES[j])>-1)t=t.split(NAMES[j]).join(mask(NAMES[j]));}return t;}
 var busy=false;
@@ -875,6 +883,7 @@ function run(root){busy=true;
  var L=[].slice.call(root.querySelectorAll('a[href*="padlet.com"]'));if(root.matches&&root.matches('a[href*="padlet.com"]'))L.push(root);L.forEach(function(a){a.removeAttribute('href');a.removeAttribute('target');a.setAttribute('data-locked','1');a.setAttribute('aria-disabled','true');
    a.querySelectorAll('*').forEach(function(c){if(c.children.length===0&&/패들렛/.test(c.textContent))c.textContent=c.textContent.replace(/패들렛에서 보기 ↗|패들렛 ↗|패들렛 전체 ↗/,'원본 비공개').replace(/↗/,'');});
    if(a.children.length===0)a.textContent=a.textContent.replace(/↗/,'').replace(/패들렛/,'원본');});}
+ root.querySelectorAll&&root.querySelectorAll('a[href*="ax-consulting-reports"]').forEach(function(a){a.remove();});
  if(document.title)document.title=fix(document.title);
  busy=false;}
 run(document.body);
